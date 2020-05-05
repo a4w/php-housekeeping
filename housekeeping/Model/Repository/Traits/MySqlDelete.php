@@ -1,6 +1,6 @@
 <?php
 
-namespace Housekeeping\Database\Traits;
+namespace Housekeeping\Model\Repository\Traits;
 
 use Housekeeping\Database\Database;
 use PDO;
@@ -8,9 +8,9 @@ use PDO;
 trait MySqlDelete
 {
     use MySqlPreprocessing;
-    public function delete($model)
+    public function delete($model): Void
     {
-        $stmt = Database::connection()->prepare("DELETE FROM `{$this->table}` WHERE `id` = :id");
+        $stmt = Database::connection()->prepare("DELETE FROM `{$this->getTable()}` WHERE `id` = :id");
         $stmt->bindValue(':id', $model->getID(), PDO::PARAM_INT);
         $stmt->execute();
     }

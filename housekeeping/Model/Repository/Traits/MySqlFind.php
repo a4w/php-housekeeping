@@ -1,6 +1,6 @@
 <?php
 
-namespace Housekeeping\Database\Traits;
+namespace Housekeeping\Model\Repository\Traits;
 
 use Housekeeping\Database\Database;
 use PDO;
@@ -13,7 +13,7 @@ trait MySqlFind
 
     public function find($id)
     {
-        $stmt = Database::connection()->prepare("SELECT {$this->columns_str} FROM `{$this->table}` WHERE `id` = :id");
+        $stmt = Database::connection()->prepare("SELECT {$this->columns_str} FROM `{$this->getTable()}` WHERE `id` = :id");
         $stmt->bindValue(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
         $result = $stmt->fetchAll();
@@ -25,7 +25,7 @@ trait MySqlFind
 
     public function findAll()
     {
-        $stmt = Database::connection()->prepare("SELECT {$this->columns_str} FROM `{$this->table}`");
+        $stmt = Database::connection()->prepare("SELECT {$this->columns_str} FROM `{$this->getTable()}`");
         $stmt->execute();
         $result = $stmt->fetchAll();
         $arr = [];

@@ -7,6 +7,7 @@ use Housekeeping\Routing\Middleware\Middleware;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Tightenco\Collect\Contracts\Support\Arrayable;
 
 class Route
 {
@@ -20,6 +21,16 @@ class Route
     public static function get(String $path, $function): Route
     {
         return self::$routes[] = new Route('GET', $path, $function);
+    }
+
+    /**
+     * @param String $path
+     * @param Callable|String $function
+     * @return Route
+     */
+    public static function post(String $path, $function): Route
+    {
+        return self::$routes[] = new Route('POST', $path, $function);
     }
 
     /**
@@ -117,7 +128,15 @@ class Route
             if (is_string($response)) {
                 $response = new Response($response, 200);
             } else if (is_array($response)) {
-                $response = new JsonResponse($response);
+                // Attempt each in array
+                $serialized = collect($response)->map(function ($elem) {
+                    if ($elem instanceof Arrayable) {
+                        return $elem->toArray();
+                    } else {
+                        return $elem;
+                    }
+                });
+                $response = new JsonResponse($serialized);
             } else if ($response instanceof Response) {
                 // Cool
             } else {

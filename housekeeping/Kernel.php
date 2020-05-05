@@ -66,6 +66,7 @@ class Kernel
             $response = $route->run($request);
         } catch (Exception $e) {
             // TODO: Handle custom exceptions
+            dump($e);
         }
         $response->send();
     }

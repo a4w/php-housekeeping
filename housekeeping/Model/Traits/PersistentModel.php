@@ -1,8 +1,8 @@
 <?php
 
-namespace Housekeeping\Models\Traits;
+namespace Housekeeping\Model\Traits;
 
-use Housekeeping\Database\Repository;
+use Housekeeping\Model\Repository\Repository;
 
 trait PersistentModel
 {

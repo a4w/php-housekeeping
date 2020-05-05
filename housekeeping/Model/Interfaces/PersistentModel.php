@@ -1,8 +1,8 @@
 <?php
 
-namespace Housekeeping\Models\Interfaces;
+namespace Housekeeping\Model\Interfaces;
 
-use Housekeeping\Database\Repository;
+use Housekeeping\Model\Repository\Repository;
 
 interface PersistentModel
 {

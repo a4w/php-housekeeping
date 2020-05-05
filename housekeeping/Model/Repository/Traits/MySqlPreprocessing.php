@@ -1,6 +1,6 @@
 <?php
 
-namespace Housekeeping\Database\Traits;
+namespace Housekeeping\Model\Repository\Traits;
 
 trait MySqlPreprocessing
 {
@@ -13,20 +13,23 @@ trait MySqlPreprocessing
         // Prepare a list of columns
         $columns = array_map(function ($val) {
             return '`' . $val . '`';
-        }, $this->columns);
+        }, $this->getColumns());
         $this->columns_str = implode(', ', $columns);
 
 
         // Prepare a list of bind params
         $bind_params = array_map(function ($val) {
             return ':' . $val;
-        }, $this->columns);
+        }, $this->getColumns());
         $this->bind_str = implode(', ', $bind_params);
 
         // Prepare a list of update binds
         $update_params = array_map(function ($val) {
             return '`' . $val . '` = ' . ':' . $val;
-        }, $this->columns);
-        $this->update_bind_str = implode(',', $update_params);
+        }, $this->getColumns());
+        $this->update_bind_str = implode(', ', $update_params);
     }
+
+    abstract static function getTable();
+    abstract static function getColumns();
 }

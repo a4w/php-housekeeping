@@ -1,14 +1,15 @@
 <?php
 
-namespace Housekeeping\Database;
+namespace Housekeeping\Model\Repository;
 
 
 interface Repository
 {
-    public static function getModel(): String;
     public function find($id);
     public function exists($id): Bool;
     public function findAll();
+    public function store($model): Void;
+    public function update($model): Void;
     public function save($model): Void;
     public function delete($model): Void;
 }
