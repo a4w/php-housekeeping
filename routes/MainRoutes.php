@@ -7,7 +7,7 @@ Route::get('/', function () {
     return 'Welcome to Housekeeping!';
 });
 
-Route::get('/hello', 'App\Controller\WelcomeController@greet');
+Route::get('/hello/', 'App\Controller\WelcomeController@greet');
 Route::get('/hello/admin', 'App\Controller\WelcomeController@greetAdmin')->middleware(AdminOnlyMiddleware::class);
 Route::get('/toilet/{id}', 'App\Controller\ToiletController@findToilet');
 Route::post('/toilet', 'App\Controller\ToiletController@addToilet');

@@ -10,14 +10,14 @@ class Router
     public static function match(Request $request): Route
     {
         // Path
-        $path = $request->getPathInfo();
+        $path = rtrim($request->getPathInfo(), '/');
         $method = $request->getMethod();
         // Start route matching
         $routes = Route::getRoutes();
         // Attempt matching one by one
         $matched = null;
         foreach ($routes as $route) {
-            $route_path = $route->getPath();
+            $route_path = rtrim($route->getPath(), '/');
             // Parse path parameters
             $route_path = preg_quote($route_path, '/');
             $regex = '/^' . preg_replace('/\\\{([^\/]+)\\\}/', '([^\/]+)', $route_path) . '\/?$/';
@@ -34,8 +34,9 @@ class Router
                 break;
             }
         }
+        dump($matched);
         if ($matched === null) {
-            throw new \Exception('Route not found'); // TODO: Custom exception
+            throw new \Exception('Route not found: '); // TODO: Custom exception
         }
         return $matched;
     }
