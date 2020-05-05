@@ -34,7 +34,6 @@ class Router
                 break;
             }
         }
-        dump($matched);
         if ($matched === null) {
             throw new \Exception('Route not found: '); // TODO: Custom exception
         }

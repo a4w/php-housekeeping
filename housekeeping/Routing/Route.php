@@ -129,14 +129,13 @@ class Route
                 $response = new Response($response, 200);
             } else if (is_array($response)) {
                 // Attempt each in array
-                $serialized = collect($response)->map(function ($elem) {
+                array_walk_recursive($response, function (&$elem) {
                     if ($elem instanceof Arrayable) {
-                        return $elem->toArray();
+                        $elem = $elem->toArray();
                     } else {
-                        return $elem;
                     }
                 });
-                $response = new JsonResponse($serialized);
+                $response = new JsonResponse($response);
             } else if ($response instanceof Response) {
                 // Cool
             } else {

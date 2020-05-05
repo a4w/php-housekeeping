@@ -2,7 +2,7 @@
 
 namespace App\Model\Repository;
 
-use App\Model\Toilet;
+use App\Model\Maker;
 use Housekeeping\Model\Repository\Repository;
 use Housekeeping\Model\Repository\Traits\MySqlCheckExistence;
 use Housekeeping\Model\Repository\Traits\MySqlDelete;
@@ -10,7 +10,7 @@ use Housekeeping\Model\Repository\Traits\MySqlFind;
 use Housekeeping\Model\Repository\Traits\MySqlSave;
 use PDOStatement;
 
-class ToiletRepository implements Repository
+class MakerRepository implements Repository
 {
     use MySqlFind;
     use MySqlDelete;
@@ -19,27 +19,25 @@ class ToiletRepository implements Repository
 
     public static function getColumns()
     {
-        return ['id', 'name', 'price', ['maker_id', 'maker']];
+        return ['id', 'name'];
     }
 
     public static function getTable()
     {
-        return 'toilets';
+        return 'makers';
     }
 
     public static function getModel(): string
     {
-        return Toilet::class;
+        return Maker::class;
     }
 
     /**
-     * @param Toilet $toilet
+     * @param Maker $maker
      */
-    public static function bindModel(PDOStatement $stmt, $toilet)
+    public static function bindModel(PDOStatement $stmt, $maker)
     {
-        $stmt->bindValue(':id', $toilet->getID());
-        $stmt->bindValue(':name', $toilet->getName());
-        $stmt->bindValue(':price', $toilet->getPrice());
-        $stmt->bindValue(':maker_id', $toilet->getMaker()->getID());
+        $stmt->bindValue(':id', $maker->getID());
+        $stmt->bindValue(':name', $maker->getName());
     }
 }

@@ -2,13 +2,19 @@
 
 namespace Housekeeping\Model\Traits;
 
+use Housekeeping\Model\Interfaces\PersistentModel as InterfacesPersistentModel;
 use Housekeeping\Model\Repository\Repository;
+use ReflectionClass;
 
 trait PersistentModel
 {
     private ?Int $id;
 
     abstract public static function getRepository(): Repository;
+    public static function getRelations(): array
+    {
+        return [];
+    }
 
     public function setID(Int $id)
     {
@@ -28,8 +34,18 @@ trait PersistentModel
         $class = self::class;
         $class_vars = get_class_vars($class);
         $model = new $class;
+        $relations = self::getRelations();
         foreach ($class_vars as $key => $val) {
-            $model->$key = $attr[$key] ?? $val;
+            if (array_key_exists($key, $relations)) {
+                // Attempt to create object
+                $relation_class = $relations[$key];
+                $reflection = new ReflectionClass($relation_class);
+                if ($reflection->implementsInterface(InterfacesPersistentModel::class)) {
+                    $model->$key = $relation_class::find($attr[$key]);
+                }
+            } else {
+                $model->$key = $attr[$key] ?? $val;
+            }
         }
         return $model;
     }

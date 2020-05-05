@@ -12,6 +12,9 @@ trait MySqlPreprocessing
     {
         // Prepare a list of columns
         $columns = array_map(function ($val) {
+            if (is_array($val)) {
+                return '`' . $val[0] . '` AS ' . $val[1];
+            }
             return '`' . $val . '`';
         }, $this->getColumns());
         $this->columns_str = implode(', ', $columns);
@@ -19,12 +22,18 @@ trait MySqlPreprocessing
 
         // Prepare a list of bind params
         $bind_params = array_map(function ($val) {
+            if (is_array($val)) {
+                $val = $val[0];
+            }
             return ':' . $val;
         }, $this->getColumns());
         $this->bind_str = implode(', ', $bind_params);
 
         // Prepare a list of update binds
         $update_params = array_map(function ($val) {
+            if (is_array($val)) {
+                $val = $val[0];
+            }
             return '`' . $val . '` = ' . ':' . $val;
         }, $this->getColumns());
         $this->update_bind_str = implode(', ', $update_params);

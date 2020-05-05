@@ -2,6 +2,8 @@
 
 namespace Housekeeping\Model\Traits;
 
+use Tightenco\Collect\Contracts\Support\Arrayable;
+
 trait Arrayalize
 {
     private function getHidden()
@@ -16,6 +18,9 @@ trait Arrayalize
         foreach ($class_vars as $key => $val) {
             if (in_array($key, $hidden))
                 continue;
+            if ($val instanceof Arrayable) {
+                $val = $val->toArray();
+            }
             $array[$key] = $val;
         }
         return $array;
