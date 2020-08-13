@@ -5,6 +5,7 @@ namespace Housekeeping;
 use Exception;
 use Housekeeping\Routing\Router;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class Kernel
 {
@@ -43,10 +44,13 @@ class Kernel
             $route = $this->router->match($request);
             // Get response
             $response = $route->run($request);
-            return $response;
+            $response->send();
         } catch (Exception $e) {
             $exception_handler = $this->exception_handler;
-            return $exception_handler($e);
+            $response = $exception_handler($e);
+            if ($response instanceof Response) {
+                $response->send();
+            }
         }
         return null;
     }
