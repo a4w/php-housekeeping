@@ -9,7 +9,11 @@ use Symfony\Component\HttpFoundation\Request;
 
 $router = new Router();
 
-$router->get('/hello', function (Request $request) {
+$router->get('/', function () {
+    return "Server is running...";
+});
+
+$router->get('/hello', function () {
     return "Hello world!";
 });
 
