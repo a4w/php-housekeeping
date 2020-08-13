@@ -3,9 +3,18 @@
 include __DIR__ . './../vendor/autoload.php';
 
 use Housekeeping\Kernel;
+use Housekeeping\Routing\Router;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
-$kernel = new Kernel(__DIR__ . '/../', true);
+$router = new Router();
+
+$router->get('/hello', function (Request $request) {
+    return "Hello world!";
+});
+
+$kernel = new Kernel(true, $router, function (Exception $exception) {
+    return new JsonResponse(['error' => true, 'message' => $exception->getMessage(), 'code' => $exception->getCode(), 'trace' => $exception->getTraceAsString()]);
+});
+
 $kernel->boot();
-
-$kernel->handleRequest();
-
