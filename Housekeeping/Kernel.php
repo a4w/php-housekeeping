@@ -3,16 +3,16 @@
 namespace Housekeeping;
 
 use Exception;
+use Housekeeping\Routing\Router;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class Kernel
 {
     /** @var Bool */
     private $debug;
 
-    /** @var String[] */
-    private $route_files;
+    /** @var Router */
+    private $router;
 
     /** @var Callable */
     private $exception_handler;
@@ -20,10 +20,10 @@ class Kernel
     /**
         @param Bool $debug Enable debugging mode
      */
-    public function __construct(Bool $debug, array $route_files, callable $exception_handler)
+    public function __construct(Bool $debug, Router $router, callable $exception_handler)
     {
         $this->debug = $debug;
-        $this->route_files = $route_files;
+        $this->router = $router;
         $this->$exception_handler = $exception_handler;
     }
 
@@ -36,19 +36,18 @@ class Kernel
             error_reporting(E_ALL);
             ini_set('display_errors', true);
         }
-        // Load routes
-        foreach ($this->route_files as $route_file) {
-            include($route_file);
-        }
-
         // Start routing
         try {
             $request = Request::createFromGlobals();
             // Match route
+            $route = $this->router->match($request);
             // Get response
+            $response = $route->run($request);
+            return $response;
         } catch (Exception $e) {
             $exception_handler = $this->exception_handler;
-            $exception_handler($e);
+            return $exception_handler($e);
         }
+        return null;
     }
 }
