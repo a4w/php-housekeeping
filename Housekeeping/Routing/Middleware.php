@@ -1,6 +1,6 @@
 <?php
 
-namespace Housekeeping\Routing\Middleware;
+namespace Housekeeping\Routing;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,5 +22,10 @@ class Middleware
     {
         $next = $this->next;
         return $next($request);
+    }
+
+    public function __invoke(Request $request): Response
+    {
+        return $this->next($request);
     }
 }
