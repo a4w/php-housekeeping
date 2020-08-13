@@ -3,7 +3,6 @@
 namespace Housekeeping\Routing;
 
 use Exception;
-use Housekeeping\Routing\Middleware\Middleware;
 use InvalidArgumentException;
 use JsonSerializable;
 use Symfony\Component\HttpFoundation\JsonResponse;
