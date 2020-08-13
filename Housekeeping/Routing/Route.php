@@ -40,14 +40,6 @@ class Route
         $this->firstMiddleware = $this->lastMiddleware = new Middleware();
     }
 
-    /**
-     *  @return Route[]
-     */
-    public static function getRoutes()
-    {
-        return self::$routes;
-    }
-
     public function getPath(): String
     {
         return $this->path;
@@ -68,6 +60,7 @@ class Route
 
     /**
      * @return Route
+     * @throws Exception
      */
     public function middleware(string $middlewareClass)
     {
@@ -82,6 +75,7 @@ class Route
 
     /**
      * @return Response
+     * @throws Exception
      */
     public function run(Request $request): Response
     {
@@ -136,60 +130,5 @@ class Route
         // Run first middleware
         $middleware = $this->firstMiddleware;
         return $middleware($request);
-    }
-
-    // Static methods for adding routes easily
-
-    /** @var Route[] All routes registered in the system */
-    private static $routes = [];
-
-    /**
-     * @param String $path
-     * @param Callable|String $function
-     * @return Route
-     */
-    public static function get(String $path, $function): Route
-    {
-        return self::$routes[] = new Route('GET', $path, $function);
-    }
-
-    /**
-     * @param String $path
-     * @param Callable|String $function
-     * @return Route
-     */
-    public static function post(String $path, $function): Route
-    {
-        return self::$routes[] = new Route('POST', $path, $function);
-    }
-
-    /**
-     * @param String $path
-     * @param Callable|String $function
-     * @return Route
-     */
-    public static function put(String $path, $function): Route
-    {
-        return self::$routes[] = new Route('PUT', $path, $function);
-    }
-
-    /**
-     * @param String $path
-     * @param Callable|String $function
-     * @return Route
-     */
-    public static function delete(String $path, $function): Route
-    {
-        return self::$routes[] = new Route('DELETE', $path, $function);
-    }
-
-    /**
-     * @param String $path
-     * @param Callable|String $function
-     * @return Route
-     */
-    public static function patch(String $path, $function): Route
-    {
-        return self::$routes[] = new Route('PATCH', $path, $function);
     }
 }
