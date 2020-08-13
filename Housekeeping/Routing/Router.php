@@ -100,7 +100,7 @@ class Router
             }
         }
         if ($matched === null) {
-            throw new Exception('Route not found: ');
+            throw new Exception('Route not found');
         }
         return $matched;
     }
