@@ -24,7 +24,7 @@ class Kernel
     {
         $this->debug = $debug;
         $this->router = $router;
-        $this->$exception_handler = $exception_handler;
+        $this->exception_handler = $exception_handler;
     }
 
     /**
