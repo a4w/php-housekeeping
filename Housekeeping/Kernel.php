@@ -12,8 +12,6 @@ class Kernel
     /** @var Bool */
     private $debug;
 
-    /** @var Router */
-    private $router;
 
     /** @var Callable */
     private $exception_handler;
@@ -21,10 +19,9 @@ class Kernel
     /**
         @param Bool $debug Enable debugging mode
      */
-    public function __construct(Bool $debug, Router $router, callable $exception_handler)
+    public function __construct(Bool $debug, callable $exception_handler)
     {
         $this->debug = $debug;
-        $this->router = $router;
         $this->exception_handler = $exception_handler;
     }
 
@@ -41,7 +38,7 @@ class Kernel
         try {
             $request = Request::createFromGlobals();
             // Match route
-            $route = $this->router->match($request);
+            $route = Router::match($request);
             // Get response
             $response = $route->run($request);
             $response->send();
