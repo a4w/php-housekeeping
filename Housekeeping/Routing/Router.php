@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 class Router
 {
     /** @var Route[] */
-    private $routes;
+    private static $routes;
 
     /**
      * Add a GET route
@@ -16,9 +16,9 @@ class Router
      * @param Callable|String $function
      * @return Route
      */
-    public function get(String $path, $function): Route
+    public static function get(String $path, $function): Route
     {
-        return $this->routes[] = new Route('GET', $path, $function);
+        return self::$routes[] = new Route('GET', $path, $function);
     }
 
     /**
@@ -27,9 +27,9 @@ class Router
      * @param Callable|String $function
      * @return Route
      */
-    public function post(String $path, $function): Route
+    public static function post(String $path, $function): Route
     {
-        return $this->routes[] = new Route('POST', $path, $function);
+        return self::$routes[] = new Route('POST', $path, $function);
     }
 
     /**
@@ -38,9 +38,9 @@ class Router
      * @param Callable|String $function
      * @return Route
      */
-    public function put(String $path, $function): Route
+    public static function put(String $path, $function): Route
     {
-        return $this->routes[] = new Route('PUT', $path, $function);
+        return self::$routes[] = new Route('PUT', $path, $function);
     }
 
     /**
@@ -49,9 +49,9 @@ class Router
      * @param Callable|String $function
      * @return Route
      */
-    public function delete(String $path, $function): Route
+    public static function delete(String $path, $function): Route
     {
-        return $this->routes[] = new Route('DELETE', $path, $function);
+        return self::$routes[] = new Route('DELETE', $path, $function);
     }
 
     /**
@@ -60,9 +60,9 @@ class Router
      * @param Callable|String $function
      * @return Route
      */
-    public function patch(String $path, $function): Route
+    public static function patch(String $path, $function): Route
     {
-        return $this->routes[] = new Route('PATCH', $path, $function);
+        return self::$routes[] = new Route('PATCH', $path, $function);
     }
 
 
@@ -72,13 +72,13 @@ class Router
         @return Route
         @throws Exception
      */
-    public function match(Request $request): Route
+    public static function match(Request $request): Route
     {
         // Path
         $path = rtrim($request->getPathInfo(), '/');
         $method = $request->getMethod();
         // Start route matching
-        $routes = $this->routes;
+        $routes = self::$routes;
         // Attempt matching one by one
         $matched = null;
         foreach ($routes as $route) {
