@@ -9,10 +9,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class Kernel
 {
-    /** @var Bool */
-    private $debug;
-
-
     /** @var Callable */
     private $exception_handler;
 
@@ -21,8 +17,18 @@ class Kernel
      */
     public function __construct(Bool $debug, callable $exception_handler)
     {
-        $this->debug = $debug;
         $this->exception_handler = $exception_handler;
+        if ($debug) {
+            error_reporting(E_ALL);
+            ini_set('display_errors', true);
+        }
+        // Load routes
+        $config = include(__DIR__ . '/../config.php');
+
+        // Run each of the routes files
+        foreach ($config['routes'] as $route) {
+            include(__DIR__ . '/../' . $route);
+        }
     }
 
     /**
@@ -30,10 +36,6 @@ class Kernel
      */
     public function boot()
     {
-        if ($this->debug) {
-            error_reporting(E_ALL);
-            ini_set('display_errors', true);
-        }
         // Start routing
         try {
             $request = Request::createFromGlobals();
